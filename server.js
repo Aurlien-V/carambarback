@@ -1,21 +1,23 @@
 const express = require('express');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
-const jokes = require('./jokes.json');
+const swaggerJsdoc = require('swagger-jsdoc');
+const jokesRoutes = require('./routes/jokesRoutes');
 
 const app = express();
+
+// Utilisation de CORS pour permettre les requêtes cross-origin
 app.use(cors());
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Endpoint pour obtenir une blague aléatoire
-app.get('/api/jokes/random', (req, res) => {
-    const randomIndex = Math.floor(Math.random() * jokes.length);
-    res.json({ joke: jokes[randomIndex] });
-});
 
-// Démarrer le serveur
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+const specs = swaggerJsdoc(options);
+
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(specs)
+);
+
+app.use('/jokes', jokesRoutes);
+
+app.listen(3000, () => console.log('Server running on port 3000'));
