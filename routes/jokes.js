@@ -5,3 +5,4 @@ const jokeController = require('../controllers/jokeControllers');
 router.get('/random', jokeController.getRandomJoke);
 
 module.exports = router;
+

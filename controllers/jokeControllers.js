@@ -1,6 +1,8 @@
-const jokes = require('./../db/jokes');
+const Joke = require('../models/joke');
 
-exports.getRandomJoke = (req, res) => {
+exports.getRandomJoke = async (req, res) => {
+  const jokes = await Joke.findAll();
   const randomIndex = Math.floor(Math.random() * jokes.length);
   res.json(jokes[randomIndex]);
 };
+

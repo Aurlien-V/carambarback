@@ -4,6 +4,7 @@ const swaggerJsdoc = require('swagger-jsdoc');
 const jokeRoutes = require('./routes/jokes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
+const sequelize = require('./db/config');
 
 const app = express();
 
@@ -16,4 +17,9 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/jokes', jokeRoutes);
 
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+const PORT = process.env.PORT || 3000;
+sequelize.sync().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+});
