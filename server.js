@@ -1,8 +1,9 @@
 const express = require('express');
 const cors = require('cors');
-const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
-const jokesRoutes = require('./routes/jokesRoutes');
+const jokeRoutes = require('./routes/jokes');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 const app = express();
 
@@ -10,14 +11,9 @@ const app = express();
 app.use(cors());
 
 
-const specs = swaggerJsdoc(options);
+app.use(express.json());
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api/jokes', jokeRoutes);
 
-app.use(
-  '/api-docs',
-  swaggerUi.serve,
-  swaggerUi.setup(specs)
-);
-
-app.use('/jokes', jokesRoutes);
 
 app.listen(3000, () => console.log('Server running on port 3000'));
